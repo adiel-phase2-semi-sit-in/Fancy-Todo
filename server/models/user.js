@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           isEmail: {
             args: true,
@@ -36,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     { sequelize }
   );
+  (async () => await sequelize.sync({ force: true }))();
   User.associate = function(models) {
     // associations can be defined here
     User.hasMany(models.Todo);
