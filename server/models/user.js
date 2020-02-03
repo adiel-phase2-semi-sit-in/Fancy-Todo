@@ -46,10 +46,11 @@ module.exports = (sequelize, DataTypes) => {
       sequelize
     }
   );
-  // (async () => await sequelize.sync({ force: true }))();
   User.associate = function(models) {
     // associations can be defined here
-    User.hasMany(models.Todo);
+    User.hasMany(models.Todo, {
+      onDelete: "CASCADE"
+    });
   };
   return User;
 };

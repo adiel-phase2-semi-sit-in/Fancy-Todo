@@ -28,7 +28,11 @@ class TodoController {
   }
 
   static find(req, res, next) {
-    Todo.findAll()
+    Todo.findAll({
+      where: {
+        UserId: req.decoded.id
+      }
+    })
       .then(response => res.status(200).json(response))
       .catch(response => next(err));
   }

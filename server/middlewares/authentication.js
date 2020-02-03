@@ -1,12 +1,24 @@
 const { verifyToken } = require("../helpers/jwt");
+const { User } = require("../models");
 module.exports = function(req, res, next) {
   try {
     const decoded = verifyToken(req.headers.token);
-    req.decoded = decoded;
-    next();
+    User.findOne({
+      where: {
+        id: decoded.id
+      }
+    }).then(response => {
+      if (response) {
+        req.decoded = decoded;
+        next();
+      } else {
+        next({
+          status: 401,
+          message: "User not registered"
+        });
+      }
+    });
   } catch (err) {
-    //   name: 'JsonWebTokenError',
-    // message: 'jwt must be provided'
-    console.log(err);
+    next(err);
   }
 };

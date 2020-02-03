@@ -46,6 +46,16 @@ class UserController {
         next(err);
       });
   }
+
+  static destroy(req, res, next) {
+    User.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+      .then(response => res.status(204).json(response))
+      .catch(err => res.status(500).json(err));
+  }
 }
 
 module.exports = UserController;
