@@ -1,25 +1,13 @@
-const pool = require("../utils/connection");
-class UserTodo {
-  constructor(todo) {
-    this._id = todo.id;
-    (this.title = todo.title),
-      (this.description = todo.description),
-      (this.status = todo.status),
-      (this.due_date = todo.due_date);
-  }
-  static create(title, description, due_date, cb) {
-    pool.query(
-      `INSERT INTO todo (title, description, due_date) VALUES ($1, $2, $3) RETURNING *`,
-      [title, description, due_date],
-      (err, res) => {
-        if (err) {
-          cb(err);
-        } else {
-          cb(null, res.rows[0]);
-        }
-      }
-    );
-  }
-}
-
-module.exports = UserTodo;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Todo = sequelize.define('Todo', {
+    title: DataTypes.STRING,
+    description: DataTypes.STRING,
+    status: DataTypes.BOOLEAN,
+    due_date: DataTypes.DATE
+  }, {});
+  Todo.associate = function(models) {
+    // associations can be defined here
+  };
+  return Todo;
+};

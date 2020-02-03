@@ -1,16 +1,16 @@
-const { TodoModel } = require("../models");
-const NOW = new Date();
-class UserTodoController {
+const { Todo } = require("../models");
+class TodoController {
   static create(req, res, next) {
-    const { title, description, due_date } = req.body;
-    TodoModel.create(title, description, due_date, (err, result) => {
-      if (err) {
+    const UserId = req.decode.id;
+    const { title, description, status, due_date } = req.body;
+    Todo.create({ UserId, title, description, status, due_date })
+      .then(response => {
+        res.status(201).json(response);
+      })
+      .catch(err => {
         res.status(400).json(err);
-      } else {
-        res.status(201).json(result);
-      }
-    });
+      });
   }
 }
 
-module.exports = UserTodoController;
+module.exports = TodoController;
