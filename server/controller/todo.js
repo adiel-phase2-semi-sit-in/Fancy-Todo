@@ -20,7 +20,7 @@ class TodoController {
       }
     })
       .then(response => {
-        res.status(204);
+        res.status(204).json();
       })
       .catch(err => {
         next(err);
@@ -34,7 +34,40 @@ class TodoController {
       }
     })
       .then(response => res.status(200).json(response))
-      .catch(response => next(err));
+      .catch(err => next(err));
+  }
+
+  static findOne(req, res, next) {
+    const todoId = req.params.id;
+    Todo.findOne({
+      where: {
+        id: todoId
+      }
+    })
+      .then(response => {
+        if (response) {
+          res.status(200).json(response);
+        } else {
+          next({
+            status: 404,
+            message: "Todo not found"
+          });
+        }
+      })
+      .catch(err => next(err));
+  }
+
+  static update(req, res, next) {
+    const todoId = req.params.id;
+    const { title, description, status, due_date } = req.body;
+    Todo.update(
+      { title, description, status, due_date },
+      { where: { id: todoId }, returning: true }
+    )
+      .then(response => {
+        res.status(200).json(response);
+      })
+      .catch(err => next(err));
   }
 }
 

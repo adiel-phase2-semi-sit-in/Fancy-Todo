@@ -43,15 +43,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
         validate: {
-          checkDate: function(v) {
-            const date = new Date(v);
-            if (date < new Date()) {
-              throw new Error("due_date cannot be less than the current date");
-            }
+          isAfter: {
+            args: new Date().toString(),
+            msg: "invalid date"
           },
           notNull: {
             args: true,
             msg: "due_date should not be empty"
+          },
+          isDate: {
+            args: true,
+            msg: "invalid date format"
           }
         }
       }
